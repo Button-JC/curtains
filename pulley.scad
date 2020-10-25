@@ -5,7 +5,7 @@ hub_r = 8;
 
 //shaft
 shaft = "round"; //"square" "rectangle", "round", "round_cut"
-shaft_a = 4.97/2;
+shaft_a = 4;//4.97/2;
 shaft_b = 4.52/2;
 
 //wheel
