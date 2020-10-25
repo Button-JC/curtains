@@ -30,7 +30,7 @@ module screws() {
 
 module groove() {
  rotate_extrude(convexity = 100) 
-   translate([24.25-3, 0, 0])
+   translate([wheel_r+1.25, 0, 0])
      rotate(45)
        square([v_depth,v_depth],0); 
 }
