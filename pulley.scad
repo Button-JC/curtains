@@ -1,24 +1,36 @@
 
+hub = false;
 hub_z = 7;
 hub_r = 8;
-hub_a = 3;
-hub_b = 5;
 
-wheel_z = 9;
-wheel_r = 20;
+shaft_a = 3;
+shaft_b = 5;
 
 v_depth = 6;
+
+wheel_r = 15;
+wheel_z = v_depth*sqrt(2);
 
 module body() {
  carve_x = 10;
  total_z = hub_z + wheel_z;
  difference() {
-   cylinder(h=total_z,r=hub_r);
-   translate([-hub_a/2,-hub_b/2,0]) {
-     cube([hub_a,hub_b,total_z], 1);
+   if(hub){
+       cylinder(h=total_z,r=hub_r);
+   }else{
+       main_wheel();
+   }
+   translate([-shaft_a/2,-shaft_b/2,0]) {
+     cube([shaft_a,shaft_b,total_z], 1);
    }
  }
- cylinder(h=wheel_z,r=wheel_r);
+ if(hub){
+    main_wheel();
+ }
+}
+
+module main_wheel(){
+  cylinder(h=wheel_z,r=wheel_r);
 }
 
 module screws() {
