@@ -4,16 +4,20 @@ hub_z = 7;
 hub_r = 8;
 
 //shaft
-shaft = "round_cut"; //"square" "rectangle", "round", "round_cut"
+shaft = "round"; //"square" "rectangle", "round", "round_cut"
 shaft_a = 4.97/2;
 shaft_b = 4.52/2;
 
 //wheel
-v_depth = 6;
 wheel_r = 15;
 
+//grooves
+grooves_num = 2;
+groov_depth = 6;
 
-wheel_z = v_depth*sqrt(2);
+
+//----------------------------------------------------
+wheel_z = groov_depth*sqrt(2)*grooves_num;
 
 module body() {
  total_z = hub_z + wheel_z;
@@ -71,10 +75,13 @@ module screws() {
 }
 
 module groove() {
- rotate_extrude(convexity = 100) 
-   translate([wheel_r+1.25, 0, 0])
-     rotate(45)
-       square([v_depth,v_depth],0); 
+ rotate_extrude(convexity = 100){ 
+   for(i = [1, grooves_num]){
+     translate([wheel_r+1.25, groov_depth*sqrt(2)*(i-1), 0])
+       rotate(45)
+         square([groov_depth,groov_depth],0); 
+   }
+ }
 }
 
 module no_screws() {
