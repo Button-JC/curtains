@@ -4,9 +4,9 @@ hub_z = 7;
 hub_r = 8;
 
 //shaft
-shaft = "round"; //"square" "rectangle", "round"
-shaft_a = 3;
-shaft_b = 5;
+shaft = "round_cut"; //"square" "rectangle", "round", "round_cut"
+shaft_a = 4.97/2;
+shaft_b = 4.52/2;
 
 //wheel
 v_depth = 6;
@@ -42,6 +42,15 @@ module shaft(total_z){
   }else if(shaft == "round"){
     translate([0,0,-total_z/2]) {
       cylinder_outer(total_z*2, shaft_a,24);
+    }
+  }else if(shaft == "round_cut"){
+    translate([0,0,-total_z/2]) {
+      difference() {
+        cylinder_outer(total_z*2, shaft_a,24);
+        translate([shaft_b,-shaft_a*2,-total_z/2]) {
+          cube([shaft_a*4,shaft_a*4,total_z*2], 1);
+        }
+      }
     }
   }
 }
