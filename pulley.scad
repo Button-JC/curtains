@@ -17,7 +17,7 @@ groov_depth = 6;
 
 
 //----------------------------------------------------
-wheel_z = groov_depth*sqrt(2)*grooves_num;
+wheel_z = groov_depth*sqrt(2)*grooves_num-(1.25*(grooves_num-1));
 
 module body() {
  total_z = hub_z + wheel_z;
@@ -76,8 +76,8 @@ module screws() {
 
 module groove() {
  rotate_extrude(convexity = 100){ 
-   for(i = [1, grooves_num]){
-     translate([wheel_r+1.25, groov_depth*sqrt(2)*(i-1), 0])
+   for(i = [1: grooves_num]){
+     translate([wheel_r+1.25, (groov_depth*sqrt(2)-1.25)*(i-1), 0])
        rotate(45)
          square([groov_depth,groov_depth],0); 
    }
