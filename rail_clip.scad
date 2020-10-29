@@ -12,7 +12,7 @@ gate_top_space = 1;
 gate_width = ring_width;
 cut_width = 0.4;
 
-add_lock = true;
+lock_type = "double"; // "none"/"single"/"double"
 
 module gate(){
   difference(){
@@ -23,7 +23,7 @@ module gate(){
       cube([pully_width, width*2, pully_height+gate_bottom_space+gate_top_space+rail_r-gate_width*2]);
     }
     translate([0,0,pully_height+gate_bottom_space+gate_top_space+rail_r-gate_width/2]){
-      rotate([0,0,add_lock?0:45]){
+      rotate([0,0,lock_type=="none"?45:0]){
         cube([cut_width, width*2, gate_width*2],center = true);
       }
     }
@@ -127,7 +127,17 @@ difference(){
   union(){
     ring();
     gate();
-    if(add_lock)lock();
+    if(lock_type=="single"){
+      lock();
+    }
+    if(lock_type=="double"){
+      translate([0,-width/4+cut_width,0]){
+        lock();
+      }
+      translate([0,+width/4-cut_width,0]){
+        lock();
+      }
+    }
   }
   rail();
 }
