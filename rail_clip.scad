@@ -1,16 +1,18 @@
 
-rail_r = 28/2;
+rail_r = 28/2+0.4;
 width = 15.1;
 
 ring_width = 2;
 pully_width = 12*sqrt(2)-1.25;
 pully_height = 30;
-pully_shaft_r = 7.6/2;
-shaft_length = 4;
+pully_shaft_r = 7.6/2-0.3;
+shaft_length = 6;
 gate_bottom_space = 20;
 gate_top_space = 1;
 gate_width = ring_width;
-cut_width = 0.2;
+cut_width = 0.4;
+
+add_lock = true;
 
 module gate(){
   difference(){
@@ -21,7 +23,7 @@ module gate(){
       cube([pully_width, width*2, pully_height+gate_bottom_space+gate_top_space+rail_r-gate_width*2]);
     }
     translate([0,0,pully_height+gate_bottom_space+gate_top_space+rail_r-gate_width/2]){
-      rotate([0,0,45]){
+      rotate([0,0,add_lock?0:45]){
         cube([cut_width, width*2, gate_width*2],center = true);
       }
     }
@@ -78,10 +80,54 @@ module cylinder_outer(height,radius,fn){
  cylinder(h=height,r=radius*fudge,$fn=fn);
 }
 
+module lock(){
+  translate([0,0,pully_height + gate_bottom_space+rail_r+gate_width+ cut_width]){
+    difference(){
+      union(){
+        cube([pully_width,width/2,gate_width],center = true);
+        translate([-pully_width/4,0,-gate_width/2]){
+          cube([pully_width/2-cut_width,width/2,gate_width],center = true);
+        }
+      }
+      translate([+pully_width/4,0,0]){
+        cube([pully_width/2-gate_width*2,width/2-gate_width,gate_width*2],center = true);
+      }
+    }
+    X0 = (pully_width/2-gate_width*2)/2-cut_width;
+    Y0 = (-width/2-gate_width)/2+2*cut_width;
+    Z0 = gate_width+cut_width;
+    translate([+X0+gate_width/2,-Y0/2,-Z0/2-cut_width]){
+      prism_latch(X0,Y0,Z0) ;
+    }
+  }
+}  
+ module prism_latch(l, w, h){
+   polyhedron(
+       points=[
+          [0,0,0],    //0
+          [l*2,0,0],  //1
+          [l*2,w,0],  //2
+          [0,w,0],    //3
+          [l,0,h],    //4
+          [l*2,0,h],  //5
+          [l*2,w,h],  //6
+          [l,w,h]],    //7
+       faces=[
+          [0,1,2,3],  // bottom
+          [4,5,1,0],  // front
+          [7,6,5,4],  // top
+          [5,6,2,1],  // right
+          [6,7,3,2],  // back
+          [7,4,0,3]   // left
+       ]
+   );
+}
+  
 difference(){
   union(){
     ring();
     gate();
+    if(add_lock)lock();
   }
   rail();
 }
