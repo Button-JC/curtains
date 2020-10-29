@@ -1,5 +1,5 @@
 
-rail_r = 28/2+0.4;
+rail_r = 28/2+0.5;
 width = 15.1;
 
 ring_width = 2;
@@ -94,7 +94,7 @@ module lock(){
       }
     }
     X0 = (pully_width/2-gate_width*2)/2-cut_width;
-    Y0 = (-width/2-gate_width)/2+2*cut_width;
+    Y0 = (-width/4-gate_width)+2*cut_width;
     Z0 = gate_width+cut_width;
     translate([+X0+gate_width/2,-Y0/2,-Z0/2-cut_width]){
       prism_latch(X0,Y0,Z0) ;
@@ -108,10 +108,10 @@ module lock(){
           [l*2,0,0],  //1
           [l*2,w,0],  //2
           [0,w,0],    //3
-          [l,0,h],    //4
-          [l*2,0,h],  //5
-          [l*2,w,h],  //6
-          [l,w,h]],    //7
+          [l,w/4,h],    //4
+          [l*2,w/4,h],  //5
+          [l*2,w/4*3,h],  //6
+          [l,w/4*3,h]],    //7
        faces=[
           [0,1,2,3],  // bottom
           [4,5,1,0],  // front
